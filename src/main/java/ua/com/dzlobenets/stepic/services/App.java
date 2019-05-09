@@ -3,12 +3,24 @@
  */
 package ua.com.dzlobenets.stepic.services;
 
-public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+import javax.servlet.http.HttpServlet;
+
+public class App {
+	public static void main(String[] args) throws Exception {
+		final HttpServlet simpleServlet = new Frontend();
+
+		final ServletContextHandler servletContextHandler = new ServletContextHandler();
+		servletContextHandler.addServlet(new ServletHolder(simpleServlet), "/test");
+
+		final Server server = new Server(8080);
+		server.setHandler(servletContextHandler);
+
+		server.start();
+		server.join();
+		// add shutdown hook
     }
 }
